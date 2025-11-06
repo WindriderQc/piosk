@@ -99,7 +99,7 @@ PiOSK supports a local development workflow where you can code on your local com
 
 ## 2.1 Local Development Setup
 
-**On your local computer:**
+### **On Linux/macOS:**
 
 1. **First time setup:**
    ```bash
@@ -125,15 +125,67 @@ PiOSK supports a local development workflow where you can code on your local com
    git push
    ```
 
+### **On Windows:**
+
+1. **Prerequisites:**
+   - Install [Git for Windows](https://git-scm.com/)
+   - Install [Node.js](https://nodejs.org/)
+   - (Optional) Install [Windows Terminal](https://aka.ms/terminal) for better experience
+
+2. **First time setup:**
+   ```cmd
+   # Clone the repository
+   git clone https://github.com/WindriderQc/piosk.git
+   cd piosk
+   
+   # Run the setup script
+   scripts\local-setup.bat
+   ```
+
+3. **Development workflow:**
+   ```cmd
+   # Make your changes in VS Code, Notepad++, or your preferred editor
+   
+   # Test locally (optional)
+   npm start
+   
+   # Commit and push changes
+   git add .
+   git commit -m "Your descriptive commit message"
+   git push
+   ```
+
 ## 2.2 Deploy to Pi
 
-**Option 1: From your local computer (recommended):**
+### **From Linux/macOS:**
 ```bash
 # Edit the PI_HOST in scripts/remote-deploy.sh first
 ./scripts/remote-deploy.sh
 ```
 
-**Option 2: Directly on the Pi:**
+### **From Windows:**
+
+**Option 1: Using Command Prompt**
+```cmd
+# Edit the PI_HOST in scripts\remote-deploy.bat first
+scripts\remote-deploy.bat
+```
+
+**Option 2: Using PowerShell** 
+```powershell
+# Run the PowerShell script (may need to allow script execution)
+.\scripts\remote-deploy.ps1
+```
+
+**Option 3: Manual SSH (if above don't work)**
+```cmd
+# Using PuTTY, Windows Terminal, or Git Bash
+ssh yb@your-pi-ip
+cd /home/yb/codes/piosk
+./scripts/deploy.sh
+```
+
+### **Directly on the Pi:**
 ```bash
 ssh your-pi-username@your-pi-ip
 cd /home/yb/codes/piosk  # or wherever your project is
@@ -142,9 +194,39 @@ cd /home/yb/codes/piosk  # or wherever your project is
 
 ## 2.3 Development Scripts
 
-- `scripts/local-setup.sh` - Sets up development environment on your local computer
-- `scripts/deploy.sh` - Pulls latest changes and deploys on the Pi
+### **Cross-platform scripts:**
+- `scripts/deploy.sh` - Pulls latest changes and deploys on the Pi (Linux/macOS)
+
+### **Linux/macOS scripts:**
+- `scripts/local-setup.sh` - Sets up development environment
 - `scripts/remote-deploy.sh` - Deploys from local computer to Pi via SSH
+
+### **Windows scripts:**
+- `scripts/local-setup.bat` - Sets up development environment (Command Prompt)
+- `scripts/remote-deploy.bat` - Deploys from local computer to Pi via SSH (Command Prompt)
+- `scripts/remote-deploy.ps1` - Deploys from local computer to Pi via SSH (PowerShell)
+
+### **Windows SSH Setup Tips:**
+
+1. **Enable OpenSSH (Windows 10/11):**
+   ```powershell
+   # Run as Administrator
+   Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+   ```
+
+2. **Set up SSH key authentication (optional but recommended):**
+   ```cmd
+   # Generate SSH key
+   ssh-keygen -t rsa
+   
+   # Copy to Pi (replace with your Pi's IP)
+   type %USERPROFILE%\.ssh\id_rsa.pub | ssh yb@your-pi-ip "cat >> ~/.ssh/authorized_keys"
+   ```
+
+3. **Alternative tools:**
+   - [PuTTY](https://putty.org/) - Popular SSH client for Windows
+   - [Windows Subsystem for Linux (WSL)](https://docs.microsoft.com/en-us/windows/wsl/) - Run Linux tools on Windows
+   - [Git Bash](https://git-scm.com/) - Comes with Git for Windows
 
 # 3. Appendix
 
