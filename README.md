@@ -93,16 +93,69 @@ sudo /opt/piosk/scripts/cleanup.sh
 > [!NOTE]  
 > By default PiOSK doesn't uninstall the system packages it installs as dependencies (i.e. `git`, `jq`, `Node.js`, `wtype`). The reason being, if they're force removed, then other packages (which have been installed since) that may also rely on them - will break.
 
-# 2. Appendix
+# 2. Development Workflow
 
-## 2.1 Assumptions
+PiOSK supports a local development workflow where you can code on your local computer and deploy to your Pi.
+
+## 2.1 Local Development Setup
+
+**On your local computer:**
+
+1. **First time setup:**
+   ```bash
+   # Clone the repository
+   git clone https://github.com/WindriderQc/piosk.git
+   cd piosk
+   
+   # Run the setup script
+   ./scripts/local-setup.sh
+   ```
+
+2. **Development workflow:**
+   ```bash
+   # Make your changes
+   nano index.js  # or use your preferred editor
+   
+   # Test locally (optional)
+   npm start
+   
+   # Commit and push changes
+   git add .
+   git commit -m "Your descriptive commit message"
+   git push
+   ```
+
+## 2.2 Deploy to Pi
+
+**Option 1: From your local computer (recommended):**
+```bash
+# Edit the PI_HOST in scripts/remote-deploy.sh first
+./scripts/remote-deploy.sh
+```
+
+**Option 2: Directly on the Pi:**
+```bash
+ssh your-pi-username@your-pi-ip
+cd /home/yb/codes/piosk  # or wherever your project is
+./scripts/deploy.sh
+```
+
+## 2.3 Development Scripts
+
+- `scripts/local-setup.sh` - Sets up development environment on your local computer
+- `scripts/deploy.sh` - Pulls latest changes and deploys on the Pi
+- `scripts/remote-deploy.sh` - Deploys from local computer to Pi via SSH
+
+# 3. Appendix
+
+## 3.1 Assumptions
 
 0. You're using a Raspberry Pi (other SBCs may work, not tested)
 1. You're using "[Raspberry Pi OS with desktop (32bit)](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-32-bit)" (other distros may work, not tested)
 2. You've applied proper [OS customizations](https://www.raspberrypi.com/documentation/computers/getting-started.html#advanced-options) & the Pi is able to access the internet (required for setup)
 3. You're not using port 80 on the Pi to run some other web server (apart from PiOSK dashboard)
 
-## 2.2 Recommendations
+## 3.2 Recommendations
 
 - Choose the right device and OS
   - If your Pi has 4GB or less memory, choose 32bit image
